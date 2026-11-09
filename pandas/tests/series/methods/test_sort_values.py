@@ -81,6 +81,14 @@ class TestSeriesSortValues:
         s.sort_values(inplace=True)
         tm.assert_series_equal(s, df.iloc[:, 0].sort_values())
 
+    def test_sort_values_preserves_object_dtype(self):
+        ser = pd.Series(["\ud83d", "☀"], dtype=object)
+
+        result = ser.sort_values()
+
+        expected = pd.Series(["☀", "\ud83d"], index=[1, 0], dtype=object)
+        tm.assert_series_equal(result, expected)
+
     def test_sort_values_categorical(self):
         cat = pd.Series(pd.Categorical(["a", "b", "b", "a"], ordered=False))
 
